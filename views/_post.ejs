@@ -1,0 +1,36 @@
+<li id="post-<%= post._id %>">
+    <% if (locals.user && locals.user.id == post.user.id) { %>
+    <small>
+        <a class="delete-post-button" href="/post/destroy/<%= post._id %>">Delete</i></a>
+    </small>
+    <% } %>
+    <%= post.content %>
+    <br>
+    <small>
+        <%= post.user.name %>
+    </small>
+    <br>
+    <small>
+        <% if (locals.user) { %>
+            <a class="toggle-like-button" data-likes="<%= post.likes.length %>" href="/likes/toggle/?id=<%= post._id %>&type=Post"><%= post.likes.length %> Likes</a>
+        <% } else { %>
+            <%= post.likes.length %> Likes
+        <% } %>
+    </small>
+    <div class="posts-comment">
+        <% if (locals.user) { %>
+            <form action="/comment/create" id="new-comment-form" method="POST">
+                <input type="text" name="content" placeholder="type comment here...">
+                <input type="hidden" name="post" value="<%= post._id %>">
+                <input type="submit" value="Add comments">
+            </form>
+        <% } %>
+        <div class="post-comment-list">
+            <ul class="post-comment-<%= post._id %>">
+                <% for (comment of post.comments) { %>
+                    <%- include('_comment.ejs') -%>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</li>

@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="<%= assetPath('css/home.css') %>">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<div id="home-container">
+    <section id="feed-posts">
+        <h4>
+            Posts
+        </h4>
+        <% if(locals.user){ %>
+        <form action="/post/create" id="new-post-form" method="POST">
+            <textarea name="content" cols="30" rows="3" placeholder="type here"></textarea>
+            <input type="submit" value="Post">
+        </form>
+        <% } %>
+        <div id="posts-list-container">
+            <ul>
+                <% for(post of posts) { %>
+                    <%- include('_post') -%>
+
+                    <!-- Add more post attributes as needed -->
+                    <% } %>
+            </ul>
+        </div>
+        
+    </section>
+    <section id="user-friends">
+        <h4>Friends</h4>
+        <% if(locals.user){for(u of all_users) {%>
+            <p>
+                <a href="/users/profile/<%= u.id %>"><%= u.name %></a>
+            </p>
+        <% } }%>
+    </section>
+    <%- include('chatBox.ejs') -%>
+</div>
+
+<script src="<%= assetPath('js/home_post_comments.js') %>" ></script>
+<script src="<%= assetPath('js/home_posts.js') %>"></script>
+
+<!-- CHANGE :: import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
+<script src="<%= assetPath('js/toggle_likes.js') %>"></script>
+<script>
+    $('.toggle-like-button').each(function(){
+        let self=this;
+        let toggleLike=new ToggleLike(self);
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+<script src="<%= assetPath('js/chat_engine.js') %>"></script>
+<% if(locals.user){ %>
+    <script >
+        new ChatEngine('user-chat-box','<%= locals.user.email %>');
+    </script>
+<% } %>
