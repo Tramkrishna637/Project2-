@@ -37,12 +37,19 @@
 <script src="<%= assetPath('js/home_posts.js') %>"></script>
 
 <!-- CHANGE :: import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
-<script src="<%= assetPath('js/toggle_likes.js') %>"></script>
+<script src="<%= assetPath('js/tooglelikes.js') %>"></script>
 <script>
-    $('.toggle-like-button').each(function(){
-        let self=this;
-        let toggleLike=new ToggleLike(self);
-    });
+    if (typeof jQuery !== 'undefined') {
+        console.log('0. jQuery is loaded. Document ready function will execute.'); // Check 0
+        $(document).ready(function() {
+            console.log('0.5. Document is ready. Initializing ToggleLike...'); // Check 0.5
+            $('.toggle-like-button').each(function() {
+                new ToggleLike(this);
+            });
+        });
+    } else {
+        console.error("jQuery is not loaded! ToggleLike functionality will not work.");
+    }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
 <script src="<%= assetPath('js/chat_engine.js') %>"></script>
